@@ -57,6 +57,8 @@ private:
     DWORD m_Objects[2] = {};
 };
 
+// TODO TEST_F(TestWin32Deleter, UniqueHANDLE)
+
 TEST_F(TestWin32Deleter, UniqueHMENU) {
     UniqueHMENU menu(CreateMenu());
     EXPECT_NE(-menu, HMENU(NULL));

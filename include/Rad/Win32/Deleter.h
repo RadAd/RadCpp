@@ -30,6 +30,7 @@ struct t##Deleter \
 }; \
 typedef std::unique_ptr<t##Deleter::pointer, t##Deleter> Unique##t
 
+DefineDeleter(HANDLE, CloseHandle);
 DefineDeleter(HDC, DeleteDC);
 DefineDeleter(HMENU, DestroyMenu);
 DefineDeleter(HBITMAP, DeleteObject);
