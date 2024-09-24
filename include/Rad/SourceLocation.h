@@ -1,29 +1,43 @@
 #pragma once
+#include <stddef.h> // for wchar_t in C
 
-template <class T>
-struct SourceLocation
+struct SourceLocationA
 {
-    SourceLocation(int line, const T* file, const T* function, const T* funcsig)
-        : line(line)
-        , file(file)
-        , function(function)
-        , funcsig(funcsig)
-    {
-    }
-
-    int line;
-    const T* file;
-    const T* function;
-    const T* funcsig;
+    long line;
+    const char* file;
+    const char* function;
+    const char* funcsig;
 };
 
-#define SRC_LOC_A SourceLocation<char>(__LINE__, __FILE__, __FUNCTION__, __FUNCSIG__)
-#define SRC_LOC_W SourceLocation<wchar_t>(__LINE__, L"" __FILE__, L"" __FUNCTION__, L"" __FUNCSIG__)
+#ifdef __cplusplus
+#define SrcLocA SourceLocationA
+#define SRC_LOC_A SourceLocationA({ __LINE__, __FILE__, __FUNCTION__, __FUNCSIG__ })
+#else
+#define SrcLocA struct SourceLocationA
+#define SRC_LOC_A (struct SourceLocationA) { __LINE__, __FILE__, __FUNCTION__, __FUNCSIG__ }
+#endif
+
+struct SourceLocationW
+{
+    long line;
+    const wchar_t* file;
+    const wchar_t* function;
+    const wchar_t* funcsig;
+};
+
+#ifdef __cplusplus
+#define SrcLocW SourceLocationW
+#define SRC_LOC_W SourceLocationW({ __LINE__, __FILEW__, __FUNCTIONW__, _CRT_WIDE(__FUNCSIG__) })
+#else
+#define SrcLocW struct SourceLocationW
+#define SRC_LOC_W (struct SourceLocationW) { __LINE__, __FILEW__, __FUNCTIONW__, _CRT_WIDE(__FUNCSIG__) }
+#endif
+
 
 #ifdef _UNICODE
-#define SrcLoc SourceLocation<wchar_t>
+#define SrcLoc SrcLocW
 #define SRC_LOC SRC_LOC_W
 #else
-#define SrcLoc SourceLocation<char>
+#define SrcLoc SrcLocA
 #define SRC_LOC SRC_LOC_A
 #endif

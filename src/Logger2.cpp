@@ -47,19 +47,19 @@ void LogRegister(LogTraceWT lt, LogLevel l, bool reg)
         g_logw[static_cast<int>(l)].erase(lt);
 }
 
-void LogMessage(LogLevel l, SourceLocation<char> sl, const char* msg)
+void LogMessage(LogLevel l, SourceLocationA sl, const char* msg)
 {
     for (LogTraceAT lt : g_loga[static_cast<int>(l)])
         lt(l, sl, msg);
 }
 
-void LogMessage(LogLevel l, SourceLocation<wchar_t> sl, const wchar_t* msg)
+void LogMessage(LogLevel l, SourceLocationW sl, const wchar_t* msg)
 {
     for (LogTraceWT lt : g_logw[static_cast<int>(l)])
         lt(l, sl, msg);
 }
 
-void LogTraceStdOutA(LogLevel l, SourceLocation<char> sl, const char* msg)
+void LogTraceStdOutA(LogLevel l, SourceLocationA sl, const char* msg)
 {
     const std::time_t time = std::time({});
     std::tm localtm = {};
@@ -83,7 +83,7 @@ void LogTraceStdOutA(LogLevel l, SourceLocation<char> sl, const char* msg)
     printf("%s-%s: %s at \033[33m%s:%d\033[0m in \033[33m%s\033[0m\n", timestr.c_str(), levelstr, msg, sl.file, sl.line, sl.funcsig);
 }
 
-void LogTraceStdOutW(LogLevel l, SourceLocation<wchar_t> sl, const wchar_t* msg)
+void LogTraceStdOutW(LogLevel l, SourceLocationW sl, const wchar_t* msg)
 {
     const std::time_t time = std::time({});
     std::tm localtm = {};
@@ -109,7 +109,7 @@ void LogTraceStdOutW(LogLevel l, SourceLocation<wchar_t> sl, const wchar_t* msg)
 
 #include <Windows.h>
 
-void LogTraceMessageBoxA(LogLevel l, SourceLocation<char> /*sl*/, const char* msg)
+void LogTraceMessageBoxA(LogLevel l, SourceLocationA /*sl*/, const char* msg)
 {
     const UINT icon = [l]() {
         switch (l)
@@ -122,7 +122,7 @@ void LogTraceMessageBoxA(LogLevel l, SourceLocation<char> /*sl*/, const char* ms
     MessageBoxA(NULL, msg, "Title", MB_OK | icon);
 }
 
-void LogTraceMessageBoxW(LogLevel l, SourceLocation<wchar_t> /*sl*/, const wchar_t* msg)
+void LogTraceMessageBoxW(LogLevel l, SourceLocationW /*sl*/, const wchar_t* msg)
 {
     const UINT icon = [l]() {
         switch (l)
